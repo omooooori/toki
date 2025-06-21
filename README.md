@@ -2,6 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-development-orange.svg)](https://github.com/your-repo/toki)
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/omooooori/toki?utm_source=oss&utm_medium=github&utm_campaign=omooooori%2Ftoki&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 
 ## 📖 概要
 
@@ -10,29 +11,81 @@ Tokiは、ユーザーの位置情報・写真・カレンダー予定をもと�
 
 ---
 
-## 📋 詳細仕様
+## 🏗️ モノレポ構成
 
-AutoDiary（Toki）は、ユーザーの位置情報・写真・カレンダー予定をもとに、毎日を自動で記録・提案するAI日記アプリです。本ドキュメントでは、課題、要件、機能仕様、考慮事項、アーキテクチャ、システム構成を一元的に記述します。
-
----
-
-## 🎯 解決したい課題
-- 忙しい生活の中で、日々の出来事や気持ちを記録する余裕がない
-- 手書き日記やSNSは手間がかかり継続しにくい
-- 記憶は曖昧になり、大切な日常の断片が自然に失われてしまう
-
-## 💡 着目した背景
-- 自分自身や周囲の体験から「振り返りたいときには記憶がない」という課題を痛感
-- スマートフォンやAI技術により、日常ログを自然に蓄積することが可能になってきている
-
-## 🌱 提供したい価値
-- 「気づいたら記録されている」自然な日記体験
-- 写真・位置・予定をもとにAIが自然な文章を生成
-- 自動で人生をアーカイブし、後から楽しく見返せる
+```
+toki/
+├── apps/
+│   ├── mobile/          # Flutterモバイルアプリ
+│   └── web/             # Next.js Webアプリ
+├── packages/
+│   ├── api/             # GraphQL BFF API
+│   ├── db/              # データベース操作
+│   ├── ai/              # AI連携モジュール
+│   └── shared/          # 共有型定義・ユーティリティ
+├── docs/
+│   ├── project_spec.md  # プロジェクト仕様書
+│   └── diagrams/        # アーキテクチャ図
+└── README.md
+```
 
 ---
 
-## 📌 機能要件（MVP）
+## 🚀 クイックスタート
+
+### 前提条件
+- Node.js 18+
+- Flutter 3.0+
+- Docker (開発環境)
+
+### セットアップ
+
+```bash
+# リポジトリのクローン
+git clone https://github.com/your-repo/toki.git
+cd toki
+
+# 依存関係のインストール
+npm install
+
+# 開発サーバーの起動
+npm run dev
+```
+
+### 各アプリケーションの起動
+
+```bash
+# Webアプリ
+cd apps/web
+npm run dev
+
+# APIサーバー
+cd packages/api
+npm run dev
+
+# モバイルアプリ
+cd apps/mobile
+flutter run
+```
+
+---
+
+## 🧱 技術スタック
+
+| レイヤ | 技術構成 |
+|--------|----------|
+| モバイル | Flutter + Riverpod + Drift |
+| Web | Next.js + TypeScript + Apollo Client |
+| バックエンド | GraphQL（Apollo Server）|
+| データベース | Firestore / Cloud SQL + Prisma |
+| 認証 | Firebase Auth |
+| AI生成 | OpenAI API / Vertex AI |
+| インフラ | GCP（Cloud Run + GitHub Actions）|
+
+---
+
+## 📋 機能要件（MVP）
+
 - 位置情報の自動取得（滞在場所＋時間）
 - 写真との自動紐づけ（Google Photos APIなど）
 - カレンダーから予定情報の取得（Google Calendar）
@@ -43,34 +96,9 @@ AutoDiary（Toki）は、ユーザーの位置情報・写真・カレンダー�
 
 ---
 
-## 🚀 非機能要件・技術的考慮事項
-- 起動時間：1秒以内
-- AI応答：3秒以内
-- バッテリー最適化：バックグラウンド位置取得の制御
-- プライバシー対応：オンデバイス処理の検討（Edge AI）
-- セキュリティ：Firebase AuthとFirestore Security Rulesの併用
-- スケーラビリティ：GraphQL BFFの導入による柔軟なフロント接続
-
----
-
-## 🧱 採用技術スタック
-| レイヤ | 技術構成 |
-|--------|----------|
-| モバイル | Flutter + Riverpod + Drift |
-| Web | Next.js + TypeScript + Apollo Client |
-| バックエンド | GraphQL（Apollo Server / gqlgen）|
-| データベース | Firestore または Cloud SQL + Prisma |
-| 認証 | Firebase Auth（トークン検証）|
-| AI生成 | OpenAI API / Vertex AI |
-| インフラ | GCP（Cloud Run / Firebase / GitHub Actions）|
-
----
-
 ## 🏗️ アーキテクチャ
 
 ![システム構成図](docs/diagrams/Architecture.png)
-
----
 
 ## 🔧 システム構成図（データフロー）
 
@@ -78,22 +106,38 @@ AutoDiary（Toki）は、ユーザーの位置情報・写真・カレンダー�
 
 ---
 
-## 📁 プロジェクト構成
+## 📚 ドキュメント
+
+- [プロジェクト仕様書](docs/project_spec.md) - 詳細な要件・設計ドキュメント
+- [アーキテクチャ図](docs/diagrams/) - PlantUMLによる構成図
+
+### 図表の生成
+
+```bash
+# PlantUMLで画像を生成
+cd docs
+./generate_images.sh
+```
+
+---
+
+## 🔧 開発
+
+### GraphQLスキーマ駆動開発
+
+1. `packages/shared/graphql/schema.graphql`でスキーマを定義
+2. `npm run codegen`で型定義を生成
+3. 各アプリケーションで型安全なGraphQL操作を実装
+
+### パッケージ間の依存関係
 
 ```
-toki/
-├── README.md
-├── scripts/
-│   └── generate_readme.sh    # README生成スクリプト
-└── docs/
-    ├── project_spec.md        # 詳細設計ドキュメント
-    └── diagrams/
-        ├── architecture.pu    # アーキテクチャ図（PlantUML）
-        ├── systemArchitecture.pu  # システム構成図（PlantUML）
-        ├── Architecture.png
-        ├── systemArchitecture.png
-        └── generate_images.sh # 図表生成スクリプト
+packages/shared ← packages/api
+packages/shared ← apps/web
+packages/shared ← apps/mobile
 ```
+
+---
 
 ## 📝 ライセンス
 
