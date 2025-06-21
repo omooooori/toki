@@ -1,0 +1,21 @@
+@startuml Architecture
+actor User
+
+User --> MobileApp : 写真撮影 / 位置記録
+User --> WebApp : 日記閲覧
+
+package "Client" {
+  [MobileApp] --> [GraphQL API]
+  [WebApp] --> [GraphQL API]
+}
+
+package "Backend" {
+  [GraphQL API] --> [Firestore]
+  [GraphQL API] --> [Cloud SQL]
+  [GraphQL API] --> [OpenAI API]
+  [GraphQL API] --> [Google Calendar API]
+  [GraphQL API] --> [Google Photos API]
+  [GraphQL API] --> [Firebase Auth]
+}
+
+@enduml

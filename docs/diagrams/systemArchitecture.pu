@@ -1,0 +1,17 @@
+@startuml systemArchitecture
+actor User
+
+User --> MobileApp : 位置情報・写真撮影
+User --> Calendar : 予定入力
+
+MobileApp --> GraphQL_API : データ取得/送信
+GraphQL_API --> FirebaseAuth : トークン検証
+GraphQL_API --> Firestore : 保存
+GraphQL_API --> GooglePhotos : 写真取得
+GraphQL_API --> GoogleCalendar : 予定取得
+GraphQL_API --> OpenAI : 日記生成リクエスト
+OpenAI --> GraphQL_API : 自然文日記
+
+GraphQL_API --> MobileApp : 日記表示データ
+MobileApp --> User : 日記表示・編集
+@enduml
