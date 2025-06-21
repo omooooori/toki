@@ -1,7 +1,5 @@
 # Toki
 
-**Toki** - AIが自動で記録する日記アプリ
-
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-development-orange.svg)](https://github.com/your-repo/toki)
 
@@ -97,29 +95,9 @@ toki/
         └── generate_images.sh # 図表生成スクリプト
 ```
 
-## 🚀 開発環境のセットアップ
-
-### README.mdの更新
-
-プロジェクト仕様を更新した場合：
-
-```bash
-./scripts/generate_readme.sh
-```
-
-### 図表の生成
-
-PlantUMLの図表を更新する場合：
-
-```bash
-cd docs/diagrams
-./generate_images.sh
-```
-
 ## 📝 ライセンス
 
 このプロジェクトは MIT ライセンスの下で公開されています。
 
 ---
 
-**Toki** - 毎日をAIが自動で記録する、新しい日記体験を提供します。
