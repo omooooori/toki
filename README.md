@@ -63,6 +63,8 @@ yarn lint:web   # Webアプリのリント
 yarn lint:api   # APIのリント
 ```
 
+> **Note**: npm warnings about unknown env config may appear during linting but can be safely ignored. These do not indicate actual lint errors.
+
 ### ビルド
 
 ```bash
