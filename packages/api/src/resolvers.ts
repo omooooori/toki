@@ -7,6 +7,6 @@ export const resolvers = {
     }),
   },
   Mutation: {
-    echo: (_: any, { message }: { message: string }) => `Echo: ${message}`,
+    echo: (_: unknown, { message }: { message: string }) => `Echo: ${message}`,
   },
 }; 
