@@ -12,9 +12,9 @@
     "codegen": "cd ../shared && npm run codegen"
   },
   "dependencies": {
-    "@toki/shared": "workspace:*",
-    "@toki/db": "workspace:*",
-    "@toki/ai": "workspace:*",
+    "@toki/shared": "file:../shared",
+    "@toki/db": "file:../db",
+    "@toki/ai": "file:../ai",
     "apollo-server-express": "^3.12.1",
     "express": "^4.18.2",
     "cors": "^2.8.5",
