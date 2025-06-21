@@ -1,0 +1,29 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# create_pr.mdc
+
+# Trigger
+When Chat includes "create pr"
+
+# Workflow
+1. Check local diff against `origin/develop`
+2. Generate concise PR Title and structured Description:
+   - タイトル
+   - やったこと
+   - やらなかったこと
+   - QA観点
+3. Run:
+``` bash
+gh pr create \
+  --title "<AI生成タイトル>" \
+  --body $'<AI生成された詳細説明>' \
+  --assignee "@me" \
+  --repo <your-org>/toki \
+  --head <current-branch> \
+  --draft
+```
+4. Reply with created PR URL
+

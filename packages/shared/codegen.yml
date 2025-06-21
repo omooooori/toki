@@ -1,0 +1,21 @@
+overwrite: true
+schema: "src/graphql/schema.graphql"
+documents: "src/graphql/operations/**/*.graphql"
+generates:
+  src/graphql/generated/index.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+    config:
+      withHooks: false
+      withComponent: false
+      withHOC: false
+  packages/api/src/graphql/generated/resolvers.ts:
+    plugins:
+      - "typescript"
+      - "typescript-resolvers"
+    config:
+      mappers:
+        User: "@toki/db#User"
+        Diary: "@toki/db#Diary"
+        AIAnalysis: "@toki/db#AIAnalysis" 

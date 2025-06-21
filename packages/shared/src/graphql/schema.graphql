@@ -1,0 +1,95 @@
+scalar DateTime
+scalar JSON
+
+type User {
+  id: ID!
+  email: String!
+  name: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  diaries: [Diary!]!
+}
+
+type Diary {
+  id: ID!
+  userId: ID!
+  user: User!
+  content: String!
+  location: Location
+  photos: [Photo!]!
+  aiAnalysis: AIAnalysis
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Location {
+  latitude: Float!
+  longitude: Float!
+  address: String
+  placeName: String
+}
+
+type Photo {
+  id: ID!
+  url: String!
+  thumbnailUrl: String
+  takenAt: DateTime
+  location: Location
+}
+
+type AIAnalysis {
+  id: ID!
+  diaryId: ID!
+  diary: Diary!
+  sentiment: Sentiment!
+  topics: [String!]!
+  summary: String
+  suggestions: [String!]!
+  createdAt: DateTime!
+}
+
+enum Sentiment {
+  POSITIVE
+  NEUTRAL
+  NEGATIVE
+}
+
+type Query {
+  me: User
+  user(id: ID!): User
+  diary(id: ID!): Diary
+  diaries(userId: ID!, limit: Int, offset: Int): [Diary!]!
+  aiAnalysis(id: ID!): AIAnalysis
+}
+
+type Mutation {
+  createDiary(input: CreateDiaryInput!): Diary!
+  updateDiary(id: ID!, input: UpdateDiaryInput!): Diary!
+  deleteDiary(id: ID!): Boolean!
+  analyzeDiary(id: ID!): AIAnalysis!
+}
+
+type Subscription {
+  diaryCreated: Diary!
+  diaryUpdated: Diary!
+  diaryDeleted: ID!
+}
+
+input CreateDiaryInput {
+  content: String!
+  location: LocationInput
+  photoUrls: [String!]
+}
+
+input UpdateDiaryInput {
+  content: String
+  location: LocationInput
+  photoUrls: [String!]
+}
+
+input LocationInput {
+  latitude: Float!
+  longitude: Float!
+  address: String
+  placeName: String
+} 
