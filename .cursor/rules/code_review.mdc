@@ -1,0 +1,12 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Trigger
+When Chat includes "review this PR"
+
+# Workflow
+1. Analyze diff with `origin/develop`
+2. Detect potential issues, performance problems, code smells
+3. Provide feedback summary (in chat)

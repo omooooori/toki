@@ -1,0 +1,40 @@
+{
+  "name": "@toki/api",
+  "version": "1.0.0",
+  "description": "Toki GraphQL BFF API",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "jest",
+    "lint": "eslint src/**/*.ts",
+    "codegen": "cd ../shared && npm run codegen"
+  },
+  "dependencies": {
+    "@toki/shared": "workspace:*",
+    "@toki/db": "workspace:*",
+    "@toki/ai": "workspace:*",
+    "apollo-server-express": "^3.12.1",
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "compression": "^1.7.4",
+    "firebase-admin": "^12.0.0",
+    "graphql": "^16.8.1",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/cors": "^2.8.17",
+    "@types/compression": "^1.7.5",
+    "@types/node": "^20.10.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3",
+    "jest": "^29.7.0",
+    "@types/jest": "^29.5.8",
+    "eslint": "^8.55.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0"
+  }
+} 
