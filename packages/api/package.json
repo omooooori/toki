@@ -8,7 +8,7 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "test": "jest",
-    "lint": "eslint src/**/*.ts",
+    "lint": "eslint src --ext .ts",
     "codegen": "cd ../shared && npm run codegen"
   },
   "dependencies": {
