@@ -1,0 +1,15 @@
+{
+  "_comment": "Altair/Insomnia/Postman用のGraphQLリクエスト例です。実際の値に置き換えてご利用ください。",
+  "url": "http://localhost:4000/graphql",
+  "method": "POST",
+  "headers": {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer YOUR_FIREBASE_ID_TOKEN"
+  },
+  "body": {
+    "query": "query GetUser($id: ID!) { getUser(id: $id) { id name createdAt } }",
+    "variables": {
+      "id": "YOUR_USER_ID"
+    }
+  }
+} 

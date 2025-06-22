@@ -1,0 +1,75 @@
+scalar DateTime
+scalar Date
+
+type User {
+  id: ID!
+  name: String
+  createdAt: DateTime!
+}
+
+type Diary {
+  id: ID!
+  userId: ID!
+  date: Date!
+  generatedText: String!
+  editedText: String
+  photos: [Photo!]!
+}
+
+type Photo {
+  id: ID!
+  userId: ID!
+  imageUrl: String!
+  takenAt: DateTime!
+  relatedLocationId: ID
+}
+
+type LocationVisit {
+  id: ID!
+  userId: ID!
+  latitude: Float!
+  longitude: Float!
+  placeName: String
+  address: String
+  visitedAt: DateTime!
+  durationMinutes: Int
+}
+
+type CalendarEvent {
+  id: ID!
+  userId: ID!
+  title: String!
+  startTime: DateTime!
+  endTime: DateTime!
+  location: String
+}
+
+type Query {
+  getUser(id: ID!): User
+  getDiary(date: Date!): Diary
+  getDiaries(userId: ID!, startDate: Date, endDate: Date): [Diary!]!
+  getPhotos(userId: ID!, startDate: DateTime, endDate: DateTime): [Photo!]!
+  getLocationVisits(userId: ID!, startDate: DateTime, endDate: DateTime): [LocationVisit!]!
+  getCalendarEvents(userId: ID!, startDate: DateTime, endDate: DateTime): [CalendarEvent!]!
+}
+
+type Mutation {
+  createUser(name: String!): User!
+  updateUser(id: ID!, name: String): User!
+  
+  createDiary(userId: ID!, date: Date!, generatedText: String!, editedText: String): Diary!
+  updateDiary(id: ID!, generatedText: String, editedText: String): Diary!
+  deleteDiary(id: ID!): Boolean!
+  
+  createPhoto(userId: ID!, imageUrl: String!, takenAt: DateTime!, relatedLocationId: ID): Photo!
+  updatePhoto(id: ID!, imageUrl: String, takenAt: DateTime, relatedLocationId: ID): Photo!
+  deletePhoto(id: ID!): Boolean!
+  
+  createLocationVisit(userId: ID!, latitude: Float!, longitude: Float!, placeName: String, address: String, visitedAt: DateTime!, durationMinutes: Int): LocationVisit!
+  updateLocationVisit(id: ID!, latitude: Float, longitude: Float, placeName: String, address: String, visitedAt: DateTime, durationMinutes: Int): LocationVisit!
+  deleteLocationVisit(id: ID!): Boolean!
+  
+  createCalendarEvent(userId: ID!, title: String!, startTime: DateTime!, endTime: DateTime!, location: String): CalendarEvent!
+  updateCalendarEvent(id: ID!, title: String, startTime: DateTime, endTime: DateTime, location: String): CalendarEvent!
+  deleteCalendarEvent(id: ID!): Boolean!
+} 
