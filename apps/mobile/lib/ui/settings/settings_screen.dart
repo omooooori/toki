@@ -13,149 +13,89 @@ class SettingsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('設定'),
-        centerTitle: true,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
       ),
-      body: ListView(
+      body: Stack(
         children: [
-          // ユーザー情報セクション
-          _buildSectionHeader('ユーザー情報'),
-          ListTile(
-            leading: const CircleAvatar(
-              child: Icon(Icons.person),
-            ),
-            title: Text(state.userName),
-            subtitle: const Text('ログイン中'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              // ユーザープロフィール編集画面への遷移（後で実装）
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('プロフィール編集（モック）')),
-              );
-            },
-          ),
-          const Divider(),
-
-          // アプリ設定セクション
-          _buildSectionHeader('アプリ設定'),
-          ListTile(
-            leading: const Icon(Icons.dark_mode),
-            title: const Text('ダークモード'),
-            subtitle: const Text('テーマを切り替えます'),
-            trailing: Switch(
-              value: state.isDarkMode,
-              onChanged: (value) {
-                viewModel.setDarkMode(value);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(value ? 'ダークモードを有効にしました' : 'ライトモードを有効にしました'),
-                  ),
-                );
-              },
-            ),
-          ),
-          const Divider(),
-
-          // データ管理セクション
-          _buildSectionHeader('データ管理'),
-          ListTile(
-            leading: const Icon(Icons.download),
-            title: const Text('データエクスポート'),
-            subtitle: const Text('日記データをエクスポートします'),
-            trailing: state.isExporting
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Icon(Icons.chevron_right),
-            onTap: state.isExporting
-                ? null
-                : () {
-                    viewModel.exportData();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('データエクスポートを開始しました（モック）')),
-                    );
-                  },
-          ),
-          ListTile(
-            leading: const Icon(Icons.backup),
-            title: const Text('バックアップ'),
-            subtitle: const Text('データをバックアップします'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('バックアップ機能（モック）')),
-              );
-            },
-          ),
-          const Divider(),
-
-          // アプリ情報セクション
-          _buildSectionHeader('アプリ情報'),
-          ListTile(
-            leading: const Icon(Icons.info),
-            title: const Text('バージョン'),
-            subtitle: const Text('1.0.0'),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('アプリ情報（モック）')),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.privacy_tip),
-            title: const Text('プライバシーポリシー'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('プライバシーポリシー（モック）')),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.description),
-            title: const Text('利用規約'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('利用規約（モック）')),
-              );
-            },
-          ),
-          const Divider(),
-
-          // ログアウトセクション
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: state.isLoggingOut
-                    ? null
-                    : () {
-                        _showLogoutDialog(context, viewModel);
-                      },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+          if (state.isLoading)
+            const Center(
+              child: CircularProgressIndicator(),
+            )
+          else
+            ListView(
+              children: [
+                // 機能設定セクション
+                _buildSectionHeader('機能設定'),
+                _buildSwitchTile(
+                  title: '位置情報',
+                  subtitle: '現在地を自動で記録します',
+                  value: state.locationEnabled,
+                  onChanged: (value) => viewModel.toggleLocationEnabled(),
+                  icon: Icons.location_on,
                 ),
-                child: state.isLoggingOut
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
-                      )
-                    : const Text(
-                        'ログアウト',
-                        style: TextStyle(fontSize: 16),
-                      ),
-              ),
+                _buildSwitchTile(
+                  title: '写真',
+                  subtitle: '写真を日記に追加できます',
+                  value: state.photoEnabled,
+                  onChanged: (value) => viewModel.togglePhotoEnabled(),
+                  icon: Icons.photo,
+                ),
+                _buildSwitchTile(
+                  title: 'AI生成',
+                  subtitle: 'AIで日記を自動生成します',
+                  value: state.aiEnabled,
+                  onChanged: (value) => viewModel.toggleAiEnabled(),
+                  icon: Icons.auto_awesome,
+                ),
+                
+                const Divider(),
+                
+                // 通知設定セクション
+                _buildSectionHeader('通知'),
+                _buildSwitchTile(
+                  title: 'プッシュ通知',
+                  subtitle: '日記作成のリマインダーを受け取ります',
+                  value: state.notificationsEnabled,
+                  onChanged: (value) => viewModel.toggleNotificationsEnabled(),
+                  icon: Icons.notifications,
+                ),
+                
+                const Divider(),
+
+                // 自動日記生成時刻セクション
+                _buildSectionHeader('自動日記生成'),
+                ListTile(
+                  leading: const Icon(Icons.schedule, color: Colors.blue),
+                  title: const Text('日記生成時刻'),
+                  subtitle: Text('${state.autoDiaryTime.format(context)} にAI日記を自動生成'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () async {
+                    final picked = await showTimePicker(
+                      context: context,
+                      initialTime: state.autoDiaryTime,
+                    );
+                    if (picked != null) {
+                      await viewModel.setAutoDiaryTime(picked);
+                    }
+                  },
+                ),
+
+                const Divider(),
+                
+                const SizedBox(height: 32),
+              ],
             ),
-          ),
+          
+          // エラー表示
+          if (state.error != null)
+            Positioned(
+              top: 16,
+              left: 16,
+              right: 16,
+              child: _buildErrorCard(state.error!, viewModel),
+            ),
         ],
       ),
     );
@@ -175,31 +115,49 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  void _showLogoutDialog(BuildContext context, SettingsViewModel viewModel) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('ログアウト'),
-          content: const Text('本当にログアウトしますか？'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('キャンセル'),
+  Widget _buildSwitchTile({
+    required String title,
+    required String subtitle,
+    required bool value,
+    required ValueChanged<bool> onChanged,
+    required IconData icon,
+  }) {
+    return ListTile(
+      leading: Icon(icon, color: Colors.blue),
+      title: Text(title),
+      subtitle: Text(subtitle),
+      trailing: Switch(
+        value: value,
+        onChanged: onChanged,
+        activeColor: Colors.blue,
+      ),
+    );
+  }
+
+  Widget _buildErrorCard(String error, SettingsViewModel viewModel) {
+    return Card(
+      color: Colors.red.shade50,
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            Icon(Icons.error, color: Colors.red.shade700),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                error,
+                style: TextStyle(color: Colors.red.shade700),
+              ),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                viewModel.logout();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('ログアウトしました（モック）')),
-                );
-              },
-              child: const Text('ログアウト'),
+            IconButton(
+              onPressed: viewModel.clearError,
+              icon: Icon(Icons.close, color: Colors.red.shade700),
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
             ),
           ],
-        );
-      },
+        ),
+      ),
     );
   }
 } 

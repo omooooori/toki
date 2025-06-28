@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'theme/app_theme.dart';
 import 'ui/main/main_layout.dart';
-import 'ui/diary_create/diary_create_screen.dart';
+import 'ui/diary_detail/diary_detail_screen.dart';
+import 'ui/settings/settings_screen.dart';
 
 final _router = GoRouter(
   initialLocation: '/',
@@ -11,10 +12,18 @@ final _router = GoRouter(
     GoRoute(
       path: '/',
       builder: (context, state) => const MainLayout(),
+      routes: [],
     ),
     GoRoute(
-      path: '/diary/create',
-      builder: (context, state) => const DiaryCreateScreen(),
+      path: '/diary/:id',
+      builder: (context, state) {
+        final diaryId = state.pathParameters['id']!;
+        return DiaryDetailScreen(diaryId: diaryId);
+      },
+    ),
+    GoRoute(
+      path: '/settings',
+      builder: (context, state) => const SettingsScreen(),
     ),
   ],
 );

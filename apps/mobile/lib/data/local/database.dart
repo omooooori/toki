@@ -15,6 +15,19 @@ class DiaryEntries extends Table {
   DateTimeColumn get updatedAt => dateTime()();
 }
 
+class LocationHistory extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  RealColumn get latitude => real()();
+  RealColumn get longitude => real()();
+  TextColumn? get address => text().nullable()();
+  TextColumn? get placeName => text().nullable()();
+  TextColumn? get buildingName => text().nullable()();
+  TextColumn? get streetName => text().nullable()();
+  TextColumn? get neighborhood => text().nullable()();
+  TextColumn? get formattedAddress => text().nullable()();
+  DateTimeColumn get timestamp => dateTime()();
+}
+
 class DiaryEntryData {
   final int? id;
   final String date;
@@ -55,12 +68,12 @@ class DiaryEntryData {
   }
 }
 
-@DriftDatabase(tables: [DiaryEntries])
+@DriftDatabase(tables: [DiaryEntries, LocationHistory])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration {
@@ -69,9 +82,64 @@ class AppDatabase extends _$AppDatabase {
         await m.createAll();
       },
       onUpgrade: (Migrator m, int from, int to) async {
-        // 将来的なマイグレーション処理
+        if (from < 2) {
+          // LocationHistoryテーブルを追加
+          await m.createTable(locationHistory);
+        }
+        if (from < 3) {
+          // LocationHistoryテーブルに新しいカラムを追加
+          await m.addColumn(locationHistory, locationHistory.buildingName);
+          await m.addColumn(locationHistory, locationHistory.streetName);
+          await m.addColumn(locationHistory, locationHistory.neighborhood);
+          await m.addColumn(locationHistory, locationHistory.formattedAddress);
+        }
       },
     );
+  }
+
+  // 位置情報履歴の操作
+  Future<int> insertLocationHistory(LocationHistoryData data) {
+    return into(locationHistory).insert(data);
+  }
+
+  Future<List<LocationHistoryData>> getLocationHistory({
+    DateTime? startDate,
+    DateTime? endDate,
+    int? limit,
+  }) {
+    final query = select(locationHistory);
+    
+    if (startDate != null) {
+      query.where((tbl) => tbl.timestamp.isBiggerOrEqualValue(startDate));
+    }
+    
+    if (endDate != null) {
+      query.where((tbl) => tbl.timestamp.isSmallerOrEqualValue(endDate));
+    }
+    
+    query.orderBy([(tbl) => OrderingTerm.desc(tbl.timestamp)]);
+    
+    if (limit != null) {
+      query.limit(limit);
+    }
+    
+    return query.get();
+  }
+
+  Future<void> deleteOldLocationHistory(DateTime before) {
+    return (delete(locationHistory)..where((tbl) => tbl.timestamp.isSmallerThanValue(before))).go();
+  }
+
+  // 日記の保存
+  Future<int> insertDiaryEntry(DiaryEntryData data) {
+    return into(diaryEntries).insert(data.toCompanion());
+  }
+
+  // 日付で日記を取得
+  Future<DiaryEntry?> getDiaryEntryByDate(String date) async {
+    final query = select(diaryEntries)..where((tbl) => tbl.date.equals(date));
+    final results = await query.get();
+    return results.isNotEmpty ? results.first : null;
   }
 }
 

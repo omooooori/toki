@@ -6,45 +6,48 @@ import '../settings/settings_screen.dart';
 import '../home/home_view_model.dart';
 import 'custom_bottom_navigation.dart';
 
-class MainLayout extends ConsumerStatefulWidget {
+class MainLayout extends ConsumerWidget {
   const MainLayout({super.key});
 
   @override
-  ConsumerState<MainLayout> createState() => _MainLayoutState();
-}
-
-class _MainLayoutState extends ConsumerState<MainLayout> {
-  final List<BottomNavigationItem> _navigationItems = const [
-    BottomNavigationItem(
-      icon: Icons.home,
-      label: 'ホーム',
-    ),
-    BottomNavigationItem(
-      icon: Icons.settings,
-      label: '設定',
-    ),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    final state = ref.watch(homeViewModelProvider);
-    final viewModel = ref.read(homeViewModelProvider.notifier);
-
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentIndex = _getCurrentIndex(context);
+    
     return Scaffold(
       body: IndexedStack(
-        index: state.selectedTabIndex,
+        index: currentIndex,
         children: const [
           HomeScreen(),
           SettingsScreen(),
         ],
       ),
-      bottomNavigationBar: CustomBottomNavigation(
-        currentIndex: state.selectedTabIndex,
-        onTap: (index) {
-          viewModel.setSelectedTab(index);
-        },
-        items: _navigationItems,
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'ホーム'),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: '設定'),
+        ],
+        currentIndex: currentIndex,
+        onTap: (index) => _onTabTapped(context, index),
       ),
     );
+  }
+
+  int _getCurrentIndex(BuildContext context) {
+    final location = GoRouterState.of(context).uri.toString();
+    if (location.startsWith('/settings')) {
+      return 1;
+    }
+    return 0;
+  }
+
+  void _onTabTapped(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        context.go('/');
+        break;
+      case 1:
+        context.go('/settings');
+        break;
+    }
   }
 } 
