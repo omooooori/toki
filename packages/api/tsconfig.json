@@ -10,15 +10,14 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "@toki/shared": "../shared/src",
-      "@toki/db": "../db/src",
-      "@toki/ai": "../ai/src"
+      "@toki/shared": ["../shared/src"],
+      "@toki/db": ["../db/src"],
+      "@toki/ai": ["../ai/src"]
     }
   },
   "include": [
@@ -28,10 +27,5 @@
     "node_modules",
     "dist",
     "**/*.test.ts"
-  ],
-  "references": [
-    { "path": "../shared" },
-    { "path": "../db" },
-    { "path": "../ai" }
   ]
 } 
