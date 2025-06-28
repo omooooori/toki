@@ -1,7 +1,7 @@
 {
   "name": "toki-monorepo",
   "version": "1.0.0",
-  "description": "Toki AI日記アプリのモノレポ",
+  "description": "AutoDiary (Toki) - AI-powered diary application",
   "private": true,
   "workspaces": [
     "apps/*",
@@ -11,22 +11,21 @@
     "dev": "concurrently \"npm run dev:web\" \"npm run dev:api\"",
     "dev:web": "cd apps/web && npm run dev",
     "dev:api": "cd packages/api && npm run dev",
-    "build": "npm run build:web && npm run build:api",
+    "build": "npm run build:web",
     "build:web": "cd apps/web && npm run build",
     "build:api": "cd packages/api && npm run build",
     "test": "npm run test:web && npm run test:api",
-    "test:web": "cd apps/web && npm run test",
-    "test:api": "cd packages/api && npm run test",
+    "test:web": "cd apps/web && npm test",
+    "test:api": "cd packages/api && npm test",
     "lint": "npm run lint:web && npm run lint:api",
     "lint:web": "cd apps/web && npm run lint",
     "lint:api": "cd packages/api && npm run lint",
-    "codegen": "cd packages/shared && npm run codegen",
-    "install:all": "npm install && npm run install:mobile",
-    "install:mobile": "cd apps/mobile && flutter pub get"
+    "clean": "npm run clean:web && npm run clean:api",
+    "clean:web": "cd apps/web && rm -rf .next",
+    "clean:api": "cd packages/api && rm -rf dist"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2",
-    "typescript": "^5.3.3"
+    "concurrently": "^8.2.2"
   },
   "engines": {
     "node": ">=18.0.0",
