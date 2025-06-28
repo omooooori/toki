@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "640269550986",
+    "firebase_url": "https://toki-61227-default-rtdb.firebaseio.com",
+    "project_id": "toki-61227",
+    "storage_bucket": "toki-61227.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640269550986:android:01d605d5a7fd9e38e6f473",
+        "android_client_info": {
+          "package_name": "com.toki.autodiary.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "640269550986-n1juq5v8vd3epvoq22jgg2avth6cir3d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRJ2mUiZpbGHhUEjDttKsewYhl3HovKBM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "640269550986-n1juq5v8vd3epvoq22jgg2avth6cir3d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "640269550986-60hktvl7o08mkuv6ogj4fokm6vqt50qu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.omooooori.toki"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
