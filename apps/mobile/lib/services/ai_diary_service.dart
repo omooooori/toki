@@ -4,15 +4,17 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import '../data/local/database.dart';
 import 'location_service.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AIDiaryService {
   static final AIDiaryService _instance = AIDiaryService._internal();
   factory AIDiaryService() => _instance;
   AIDiaryService._internal();
 
-  // OpenAI API設定（実際のAPIキーに置き換えてください）
-  static const String _openaiApiKey = 'YOUR_OPENAI_API_KEY';
-  static const String _openaiApiUrl = 'https://api.openai.com/v1/chat/completions';
+  // OpenAI API設定
+  String get _openaiApiKey => dotenv.env['OPENAI_API_KEY'] ?? '';
+  String get _openaiApiUrl => dotenv.env['OPENAI_API_URL'] ?? 'https://api.openai.com/v1/chat/completions';
+  String get _openaiModel => dotenv.env['OPENAI_MODEL'] ?? 'gpt-4';
 
   /// 指定日の位置情報履歴を基にAI日記を生成
   Future<String?> generateDiaryForDate(DateTime date) async {
@@ -143,7 +145,7 @@ $locationText
 
   /// OpenAI APIを呼び出し
   Future<String?> _callOpenAI(String prompt) async {
-    if (_openaiApiKey == 'YOUR_OPENAI_API_KEY') {
+    if (_openaiApiKey.isEmpty) {
       print('OpenAI APIキーが設定されていません');
       return _generateMockDiary(prompt);
     }
@@ -156,7 +158,7 @@ $locationText
           'Authorization': 'Bearer $_openaiApiKey',
         },
         body: jsonEncode({
-          'model': 'gpt-3.5-turbo',
+          'model': _openaiModel,
           'messages': [
             {
               'role': 'system',
@@ -177,11 +179,11 @@ $locationText
         final content = data['choices'][0]['message']['content'];
         return content.trim();
       } else {
-        print('OpenAI API エラー: ${response.statusCode} - ${response.body}');
+        print('OpenAI API エラー: \\${response.statusCode} - \\${response.body}');
         return _generateMockDiary(prompt);
       }
     } catch (e) {
-      print('OpenAI API 呼び出しエラー: $e');
+      print('OpenAI API 呼び出しエラー: \\${e}');
       return _generateMockDiary(prompt);
     }
   }
